@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <string>
 
-constexpr int messageLength = 1023;
-constexpr int bitfieldLength = 10;
+constexpr auto messageLength = 1023;
+constexpr auto bitfieldLength = 10;
 
 std::vector<int> readFile(const std::string &fileName) {
     std::ifstream file;
@@ -44,12 +44,12 @@ std::vector<bool> episodeOne() {
 std::vector<bool> episodeTwo(int a, int b) {
     auto bitfield = std::vector<bool>{};
     auto episode = std::vector<bool>{};
-    for (int i = 0; i < bitfieldLength; i++) {
+    for (auto i = 0; i < bitfieldLength; i++) {
         bitfield.push_back(true);
     }
-    for (int i = 0; i < messageLength; i++) {
+    for (auto i = 0; i < messageLength; i++) {
         episode.push_back(bitfield.at(a) ^bitfield.at(b));
-        bool rotateBit =
+        auto rotateBit =
                 bitfield.at(1) ^bitfield.at(2) ^bitfield.at(5) ^bitfield.at(7) ^bitfield.at(8) ^bitfield.at(9);
         std::shift_right(bitfield.begin(), bitfield.end(), 1);
         bitfield.front() = rotateBit;
@@ -94,12 +94,12 @@ int main(int argc, char **argv) {
         return -1;
     }
     const auto chipSequences = chipCodes();
-    int id = 1;
+    auto id = 1;
     for (auto chipSequence : chipSequences) {
-        for(int delta = 0; delta < messageLength; delta++) {
+        for(auto delta = 0; delta < messageLength; delta++) {
             auto crossProduct = 0;
-            for(int j = 0; j < messageLength; j++) {
-                crossProduct += chipSequence.at(j) * data.at(j);
+            for(auto number = 0; number < messageLength; number++) {
+                crossProduct += chipSequence.at(number) * data.at(number);
             }
             print(id,delta,crossProduct);
             std::rotate(chipSequence.rbegin(),chipSequence.rbegin()+1, chipSequence.rend());
