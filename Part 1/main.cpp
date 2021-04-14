@@ -29,10 +29,10 @@ std::vector<int> readFile(const std::string &fileName) {
 std::vector<bool> episodeOne() {
     auto bitfield = std::vector<bool>{};
     auto episode = std::vector<bool>{};
-    for (int i = 0; i < bitfieldLength; i++) {
+    for (auto i = 0; i < bitfieldLength; i++) {
         bitfield.push_back(true);
     }
-    for (int i = 0; i < messageLength; i++) {
+    for (auto i = 0; i < messageLength; i++) {
         episode.push_back(bitfield.back());
         bool rotateBit = bitfield.at(2) ^bitfield.at(9);
         std::shift_right(bitfield.begin(), bitfield.end(), 1);
