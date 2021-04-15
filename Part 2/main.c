@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+const int messageLength = 1023;
+const int bitfieldLength = 10;
+const int combinationsLength = 24;
+
+int readFile(const char *fileName, int *data) {
+    FILE *file;
+
+    if (fopen_s(&file, fileName, "r") != 0) {
+        perror("File does not exists!");
+        return -1;
+    }
+
+    int value = 0;
+
+    for (int i = 0; i < messageLength; i++) {
+        fscanf_s(file, "%d", &value);
+        data[i] = value;
+    }
+
+    fclose(file);
+    return 0;
+}
+
+void episodeOne(int *episode) {
+    int bitfield[bitfieldLength];
+    for (int i = 0; i < bitfieldLength; i++) {
+        bitfield[i] = 1;
+    }
+    for (int i = 0; i < messageLength; i++) {
+        episode[i] = bitfield[9];
+        int rotateBit = bitfield[2] ^bitfield[9];
+        for (int j = bitfieldLength - 1; j > 0; j--) {
+            bitfield[j] = bitfield[j - 1];
+        }
+        bitfield[0] = rotateBit;
+    }
+
+}
+
+void episodeTwo(int *episode, int a, int b) {
+    int bitfield[bitfieldLength];
+    for (int i = 0; i < bitfieldLength; i++) {
+        bitfield[i] = 1;
+    }
+    for (int i = 0; i < messageLength; i++) {
+        episode[i] = bitfield[a] ^ bitfield[b];
+        int rotateBit = bitfield[1] ^bitfield[2] ^bitfield[5] ^bitfield[7] ^bitfield[8] ^bitfield[9];
+        for (int j = bitfieldLength - 1; j > 0; j--) {
+            bitfield[j] = bitfield[j - 1];
+        }
+        bitfield[0] = rotateBit;
+    }
+}
+
+void chipCodes(int chipSequences[][messageLength]) {
+    int combinations[24][2] = {{1,5},{2,6},{3,7},{4,8},{0,8},{1,9},{0,7},{1,8},{2,9},{1,2},{2,3},{4,5},{5,6},{6,7},{7,8},{8,9},{0,3},{1,4},{2,5},{3,6},{4,7},{5,8},{0,2},{3,5}};
+    int firstEpisode[messageLength];
+    episodeOne(firstEpisode);
+    for (int i = 0; i < combinationsLength; i++) {
+        int secondEpisode[messageLength];
+        episodeTwo(secondEpisode, combinations[i][0], combinations[i][1]);
+        for (int j = 0; j < messageLength; j++) {
+            secondEpisode[j] = secondEpisode[j] ^ firstEpisode[j];
+        }
+        for (int k = 0; k < messageLength; k++) {
+            chipSequences[i][k] = secondEpisode[k];
+        }
+    }
+}
+
+void print(int id, int delta, int crossProduct) {
+    if (200 < crossProduct && crossProduct < 800) {
+        printf("Satellite %2d has sent bit 1 (delta = %3d)\n", id + 1, delta);
+    } else if (-200 > crossProduct && crossProduct > -800) {
+        printf("Satellite %2d has sent bit 0 (delta = %3d)\n", id + 1, delta);
+    }
+}
+
+
+int main(int argc, char **argv) {
+
+    if (argc < 2) {
+        perror("File parameter is missing!\n");
+        return -1;
+    }
+
+    int data[messageLength];
+    if (readFile(argv[1], data)) {
+        return -1;
+    }
+    int chipSequences[combinationsLength][messageLength];
+    chipCodes(chipSequences);
+    for (int id = 0; id < combinationsLength; id++) {
+        for (int delta = 0; delta < messageLength; delta++) {
+            int crossProduct = 0;
+            for (int number = 0; number < messageLength; number++) {
+                crossProduct += chipSequences[id][number] * data[number];
+            }
+            print(id, delta, crossProduct);
+
+            int rotateBit = chipSequences[id][messageLength - 1];
+            for (int j = messageLength - 1; j > 0; j--) {
+                chipSequences[id][j] = chipSequences[id][j - 1];
+            }
+            chipSequences[id][0] = rotateBit;
+        }
+    }
+
+    return 0;
+}
