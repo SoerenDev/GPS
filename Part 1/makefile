@@ -1,5 +1,5 @@
 prog:
-	clang main.cpp -o app.exe -std=c++20
+	clang main.cpp -std=c++20 -Wall
 
 clean:
-	rm app.*
+	rm a.*

@@ -1,5 +1,5 @@
 prog:
-	clang main.c -o app.exe -std=c11
+	clang main.c -std=c11 -Wall
 
 clean:
-	rm app.*
+	rm a.*
