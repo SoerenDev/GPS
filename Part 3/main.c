@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdint.h>
 
 
 const int messageLength = 1023;
 const int bitfieldLength = 10;
 const int combinationsLength = 24;
 
-int readFile(const char *fileName, int *data) {
+int8_t readFile(const char *fileName, int8_t *data) {
     FILE *file;
 
     if (fopen_s(&file, fileName, "r") != 0) {
@@ -17,7 +18,7 @@ int readFile(const char *fileName, int *data) {
 
     int value = 0;
 
-    for (int i = 0; i < messageLength; i++) {
+    for (int16_t i = 0; i < messageLength; i++) {
         fscanf_s(file, "%d", &value);
         data[i] = value;
     }
@@ -26,44 +27,44 @@ int readFile(const char *fileName, int *data) {
     return 0;
 }
 
-void episodeOne(int *episode) {
-    int bitfield[bitfieldLength];
-    for (int i = 0; i < bitfieldLength; i++) {
+void episodeOne(int8_t *episode) {
+    int8_t bitfield[bitfieldLength];
+    for (int8_t i = 0; i < bitfieldLength; i++) {
         bitfield[i] = 1;
     }
-    for (int i = 0; i < messageLength; i++) {
+    for (int16_t i = 0; i < messageLength; i++) {
         episode[i] = bitfield[9];
-        int rotateBit = bitfield[2] ^bitfield[9];
-        for (int j = bitfieldLength - 1; j > 0; j--) {
+        int8_t rotateBit = bitfield[2] ^bitfield[9];
+        for (int8_t j = bitfieldLength - 1; j > 0; j--) {
             bitfield[j] = bitfield[j - 1];
         }
         bitfield[0] = rotateBit;
     }
 }
 
-void episodeTwo(int *episode, int a, int b) {
-    int bitfield[bitfieldLength];
-    for (int i = 0; i < bitfieldLength; i++) {
+void episodeTwo(int8_t *episode, int8_t a, int8_t b) {
+    int8_t bitfield[bitfieldLength];
+    for (int8_t i = 0; i < bitfieldLength; i++) {
         bitfield[i] = 1;
     }
-    for (int i = 0; i < messageLength; i++) {
+    for (int16_t i = 0; i < messageLength; i++) {
         episode[i] = bitfield[a] ^ bitfield[b];
-        int rotateBit = bitfield[1] ^bitfield[2] ^bitfield[5] ^bitfield[7] ^bitfield[8] ^bitfield[9];
-        for (int j = bitfieldLength - 1; j > 0; j--) {
+        int8_t rotateBit = bitfield[1] ^bitfield[2] ^bitfield[5] ^bitfield[7] ^bitfield[8] ^bitfield[9];
+        for (int8_t j = bitfieldLength - 1; j > 0; j--) {
             bitfield[j] = bitfield[j - 1];
         }
         bitfield[0] = rotateBit;
     }
 }
 
-void chipCodes(int chipSequences[][messageLength*2]) {
-    int combinations[24][2] = {{1,5},{2,6},{3,7},{4,8},{0,8},{1,9},{0,7},{1,8},{2,9},{1,2},{2,3},{4,5},{5,6},{6,7},{7,8},{8,9},{0,3},{1,4},{2,5},{3,6},{4,7},{5,8},{0,2},{3,5}};
-    int firstEpisode[messageLength];
+void chipCodes(int8_t chipSequences[][messageLength*2]) {
+    int8_t combinations[24][2] = {{1,5},{2,6},{3,7},{4,8},{0,8},{1,9},{0,7},{1,8},{2,9},{1,2},{2,3},{4,5},{5,6},{6,7},{7,8},{8,9},{0,3},{1,4},{2,5},{3,6},{4,7},{5,8},{0,2},{3,5}};
+    int8_t firstEpisode[messageLength];
     episodeOne(firstEpisode);
-    for (int i = 0; i < combinationsLength; i++) {
-        int secondEpisode[messageLength];
+    for (int8_t i = 0; i < combinationsLength; i++) {
+        int8_t secondEpisode[messageLength];
         episodeTwo(secondEpisode, combinations[i][0], combinations[i][1]);
-        for (int k = 0; k < messageLength; k++) {
+        for (int16_t k = 0; k < messageLength; k++) {
             secondEpisode[k] = secondEpisode[k] ^ firstEpisode[k];
             chipSequences[i][k] = secondEpisode[k];
             chipSequences[i][k+messageLength] = secondEpisode[k];
@@ -82,23 +83,23 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    int data[messageLength];
+    int8_t data[messageLength];
     if (readFile(argv[1], data)) {
         return -1;
     }
-    int chipSequences[combinationsLength][messageLength*2];
+    int8_t chipSequences[combinationsLength][messageLength*2];
     chipCodes(chipSequences);
-    for (int id = 0; id < combinationsLength; id++) {
-        for (int delta = 0; delta < messageLength; delta++) {
-            int crossProduct = 0;
-            for (int number = 0; number < messageLength; number++) {
+    for (int16_t id = 0; id < combinationsLength; id++) {
+        for (int16_t delta = 0; delta < messageLength; delta++) {
+            int16_t crossProduct = 0;
+            for (int16_t number = 0; number < messageLength; number++) {
                 crossProduct += chipSequences[id][number+delta] * data[number];
             }
 
-            if (200 < crossProduct) {
+            if (256 < crossProduct) {
                 printf("Satellite %2d has sent bit 1 (delta = %3d)\n", id + 1, delta + 1);
                 break;
-            } else if (-200 > crossProduct) {
+            } else if (-256 > crossProduct) {
                 printf("Satellite %2d has sent bit 0 (delta = %3d)\n", id + 1, delta + 1);
                 break;
             }
