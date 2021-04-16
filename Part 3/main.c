@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 
-const int messageLength = 1023;
-const int bitfieldLength = 10;
-const int combinationsLength = 24;
+const int16_t messageLength = 1023;
+const int8_t bitfieldLength = 10;
+const int8_t combinationsLength = 24;
 
 int8_t readFile(const char *fileName, int8_t *data) {
     FILE *file;
