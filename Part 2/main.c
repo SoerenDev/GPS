@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 const int messageLength = 1023;
@@ -83,6 +84,9 @@ void print(int id, int delta, int crossProduct) {
 
 int main(int argc, char **argv) {
 
+    clock_t start, stop;
+    start = clock();
+
     if (argc < 2) {
         perror("File parameter is missing!\n");
         return -1;
@@ -109,6 +113,8 @@ int main(int argc, char **argv) {
             chipSequences[id][0] = rotateBit;
         }
     }
+    stop = clock();
+    printf("\n%.0f Milliseconds\n", ((double)(stop - start) / CLOCKS_PER_SEC) * 1000);
 
     return 0;
 }

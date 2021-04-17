@@ -118,7 +118,7 @@ clock_t start, stop;
 start = clock();
 // Hier zwischen befindet sich das eigentliche Programm
 stop = clock();
-printf("%.0f Milliseconds\n", ((double)(stop - start) / CLOCKS_PER_SEC) * 1000);
+printf("\n%.0f Milliseconds\n", ((double)(stop - start) / CLOCKS_PER_SEC) * 1000);
 ````
 
 # Projekt starten

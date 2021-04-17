@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
     }
 
     stop = clock();
-    printf("%.0f Milliseconds\n", ((double)(stop - start) / CLOCKS_PER_SEC) * 1000);
+    printf("\n%.0f Milliseconds\n", ((double)(stop - start) / CLOCKS_PER_SEC) * 1000);
     return 0;
 }
 
