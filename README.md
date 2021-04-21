@@ -72,7 +72,7 @@ if (256 < crossProduct) {
 
 
 
-Die nächste Optimierung ist etwas kniffliger. Was bis jetzt nicht erwähnt wurde ist, dass bis jetzt eigentlich vier `for` Schleifen verwendet wurden. Das heißt, dass wir eigentlich eine Laufzeit von `O(n⁴)` hatten. Die Rotation wurde ebenfalls noch in einer Schleife gelöst. Doch durch einen Trick lässt sich diese wegoptimieren. Dazu muss man die Chipsequenz anfangs zwei mal hintereinander schreiben. Nun durchläuft man bei jedem Schleifen Durchlauf die Chipsequenz um einen nach rechts versetzt bis 1023. Dies macht man wiederum 1023 mal. Dieses Verhalten entspricht der einer links Rotation. Dies spart einiges an Zeit. Insgesamt lag auf der getesteten Maschine eine Zeitersparnis von 54 Millisekunden vor.  Hier sieht man, wie der Schleifendurchlauf nun aussieht. Was hier nicht zu sehen ist, wie die Befüllung der Datenstruktur von `chipSequences` aussieht.
+Die nächste Optimierung ist etwas kniffliger. Was bis jetzt nicht erwähnt wurde ist, dass bis jetzt eigentlich vier `for` Schleifen verwendet wurden. Die Rotation wurde ebenfalls noch in einer Schleife gelöst. Doch durch einen Trick lässt sich diese wegoptimieren. Dazu muss man die Chipsequenz anfangs zwei mal hintereinander schreiben. Nun durchläuft man bei jedem Schleifen Durchlauf die Chipsequenz um einen nach rechts versetzt bis 1023. Dies macht man wiederum 1023 mal. Dieses Verhalten entspricht der einer links Rotation. Dies spart einiges an Zeit. Insgesamt lag auf der getesteten Maschine eine Zeitersparnis von 54 Millisekunden vor.  Hier sieht man, wie der Schleifendurchlauf nun aussieht. Was hier nicht zu sehen ist, wie die Befüllung der Datenstruktur von `chipSequences` aussieht.
 
 
 
